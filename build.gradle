@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -19,8 +19,14 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
+}
+
+ext {
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+    minimumSdkVersion = 21
 }
 
 task clean(type: Delete) {
