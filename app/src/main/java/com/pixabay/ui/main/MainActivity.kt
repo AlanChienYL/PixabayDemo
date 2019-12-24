@@ -17,7 +17,7 @@ import timber.log.Timber
  * Created by AlanChien on 23,December,2019.
  */
 
-const val SPAN_COUNT = 5
+const val SPAN_COUNT = 2
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
