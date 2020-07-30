@@ -1,5 +1,6 @@
 package com.pixabay.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.airbnb.epoxy.VisibilityState
@@ -24,8 +25,11 @@ class MainViewModel : BaseViewModel() {
     private var page = START_PAGE
     private var totalCnt: Int = 0
     private var noMorePage = false
+    private val imagesResult: MutableList<Hit> = arrayListOf()
     val loadingNextPage: MutableLiveData<Boolean> = MutableLiveData(false)
-    val images = MutableLiveData<MutableList<Hit>>(arrayListOf())
+    private val _images = MutableLiveData<List<Hit>>(imagesResult)
+    val images: LiveData<List<Hit>>
+        get() = _images
     private val interactor = ImagesInteractor(::apiSuccess, ::apiFailure)
 
     fun start() {
@@ -50,9 +54,9 @@ class MainViewModel : BaseViewModel() {
         totalCnt = totalCntResp
     }
 
-    private fun updateImageList(hits: MutableList<Hit>) {
-        images.value?.addAll(hits)
-        images.notifyObserver()
+    private fun updateImageList(hits: List<Hit>) {
+        imagesResult.addAll(hits)
+        _images.notifyObserver()
     }
 
     private fun apiFailure(msg: String) {
@@ -73,7 +77,8 @@ class MainViewModel : BaseViewModel() {
                 isLastImageVisible(index, visibilityState) && !noMorePage
     }?.loadNextPage()
 
-    private fun isFinishToGetPageImages(): Boolean = ::requestJob.isInitialized && requestJob.isCompleted
+    private fun isFinishToGetPageImages(): Boolean =
+        ::requestJob.isInitialized && requestJob.isCompleted
 
     private fun isLastImageVisible(index: Int, visibilityState: Int): Boolean =
         images.value?.size == index + 1 && visibilityState == VisibilityState.FULL_IMPRESSION_VISIBLE

@@ -10,7 +10,7 @@ import com.pixabay.ui.main.model.mainLoading
  */
 class MainController(private val viewModel: MainViewModel) : EpoxyController() {
 
-    lateinit var hits: MutableList<Hit>
+    lateinit var hits: List<Hit>
     var loading = false
 
     override fun buildModels() {
